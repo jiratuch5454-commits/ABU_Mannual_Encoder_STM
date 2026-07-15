@@ -166,7 +166,7 @@ void update_control() {
 void digital_control(){
   bool triangle_pressed = ps5.Triangle(); 
   if (triangle_pressed && !last_triangle_state) {
-    if (Serial2) Serial2.write('A'); 
+    if (Serial2) Serial2.write('D'); 
   }
   last_triangle_state = triangle_pressed;
 
@@ -184,25 +184,28 @@ void digital_control(){
 
   bool circle_pressed = ps5.Circle(); 
   if (circle_pressed && !last_circle_state) {
-    if (Serial2) Serial2.write('D');
-  } else if (!circle_pressed && last_circle_state) {
-    if (Serial2) Serial2.write('d');
+    if (Serial2) Serial2.write('A');
   }
   last_circle_state = circle_pressed;
-  
+
   bool share_pressed = ps5.Share();
   if (share_pressed && !last_share_state) {
-    if (Serial2) Serial2.write('E');
-    Serial.println("Share button pressed");
+    digitalWrite(RELAY_5, LOW);
+    Serial.println("Master RELAY_5 ON");
+  } else if (!share_pressed && last_share_state) {
+    digitalWrite(RELAY_5, HIGH);
+    Serial.println("Master RELAY_5 OFF");
   }
   last_share_state = share_pressed;
   
   bool options_pressed = ps5.Options();
   if (options_pressed && !last_options_state) {
-    if (Serial2) Serial2.write('F');
-  }else if (!options_pressed && last_options_state) {
-      if (Serial2) Serial2.write('f');
-    }
+    digitalWrite(RELAY_6, LOW);
+    Serial.println("Master RELAY_6 ON");
+  } else if (!options_pressed && last_options_state) {
+    digitalWrite(RELAY_6, HIGH);
+    Serial.println("Master RELAY_6 OFF");
+  }
   last_options_state = options_pressed;
 }
 
@@ -257,6 +260,18 @@ void lift_robot() {
   }
   
   int lift_pwm = getAnalogPWM(R_Y, RStickY_Calib, limit_speed);
+
+  bool hit_lift_back = (digitalRead(LIMIT_SW_5_PIN_BACK) == LOW);
+  bool hit_lift_front = (digitalRead(LIMIT_SW_6_PIN_FRONT) == LOW);
+
+  if (lift_pwm > 0 && hit_lift_front) {
+    lift_pwm = 0;
+  } 
+
+  else if (lift_pwm < 0 && hit_lift_back) {
+    lift_pwm = 0;
+  }
+
   lift.run(lift_pwm);
 
   if (last_box_pwm != 0) {
@@ -277,6 +292,15 @@ void setup() {
   setCpuFrequencyMhz(240);
   Serial.begin(115200);
   Serial2.begin(115200, SERIAL_8N1, 21, 22);
+
+  pinMode(RELAY_5, OUTPUT);
+  pinMode(RELAY_6, OUTPUT);
+  pinMode(LIMIT_SW_5_PIN_BACK, INPUT_PULLUP);
+  pinMode(LIMIT_SW_6_PIN_FRONT, INPUT_PULLUP);
+
+  digitalWrite(RELAY_5, HIGH);
+  digitalWrite(RELAY_6, HIGH);
+
 
   ps5.begin(MAC_PS5); 
 

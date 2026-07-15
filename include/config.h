@@ -35,7 +35,7 @@
 #define MT_ARM_A 19
 #define MT_ARM_B 23
 
-#define MT_liftS2_A 35
+#define MT_liftS2_A 25
 #define MT_liftS2_B 32
 
 //BOX
@@ -47,15 +47,17 @@
 #define LIMIT_SW_4_PIN_FRONT 36
 
 //lift
-// #define LIMIT_SW_5_PIN_BACK 
-// #define LIMIT_SW_6_PIN_FRONT 
+#define LIMIT_SW_5_PIN_BACK 35 // บน
+#define LIMIT_SW_6_PIN_FRONT 34 // ล่าง
 
+// relay Slave
 #define RELAY_1 32
 #define RELAY_2 33
 #define RELAY_3 25
 #define RELAY_4 26
-#define RELAY_5 36
-#define RELAY_6 39
+// Relay Master
+#define RELAY_5 33
+#define RELAY_6 26
 
 // #define WHEEL_DIAMETER 0.153
 #define WHEEL_DIAMETER 0.1524
