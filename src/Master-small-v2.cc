@@ -22,7 +22,7 @@ float g_req_linear_vel_x = 0;
 float g_req_linear_vel_y = 0;
 float g_req_angular_vel_z = 0;
 
-float f_walkspeed = 1.2 * Nerf;
+float f_walkspeed = 1.5 * Nerf;
 float n_walkspeed = 0.5 * (Nerf - 0.1);
 float s_walkspeed = 0.2; 
 
@@ -172,7 +172,7 @@ void digital_control(){
 
   bool square_pressed = ps5.Square(); 
   if (square_pressed && !last_square_state) {
-    if (Serial2) Serial2.write('B'); 
+    if (Serial2) Serial2.write('A'); 
   }
   last_square_state = square_pressed;
 
@@ -184,7 +184,7 @@ void digital_control(){
 
   bool circle_pressed = ps5.Circle(); 
   if (circle_pressed && !last_circle_state) {
-    if (Serial2) Serial2.write('A');
+    if (Serial2) Serial2.write('B');
   }
   last_circle_state = circle_pressed;
 
