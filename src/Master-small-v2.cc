@@ -175,7 +175,7 @@ void digital_control(){
     if (Serial2) Serial2.write('A'); 
   }
   last_square_state = square_pressed;
-
+  //สวัสดีจ้า
   bool x_pressed = ps5.Cross(); 
   if (x_pressed && !last_x_state) {
     if (Serial2) Serial2.write('C'); 
